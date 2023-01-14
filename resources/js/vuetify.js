@@ -6,7 +6,7 @@ import '@mdi/font/css/materialdesignicons.min.css'
 
 Vue.use(VueMask)
 Vue.use(Vuetify)
-Vue.use(require('vue-moment'));
+
 
 export default new Vuetify({
   theme: {

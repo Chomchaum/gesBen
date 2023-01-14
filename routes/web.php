@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/', 'welcome', ['name' => 'App']);
+
+Route::view('/login', 'login');
+
+Route::post('auth/register', [\App\Http\Controllers\SanctumAuthController::class, 'register'])->name('register');

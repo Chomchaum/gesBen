@@ -5,9 +5,16 @@ require('./bootstrap');
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+const moment = require('moment')
+require('moment/locale/fr')
+Vue.use(require('vue-moment'), {
+  moment
+});
+
 import Vue from "vue";
 import vuetify from './vuetify';
 import App from "./components/App.vue";
+import LoginPage from "./components/LoginPage.vue";
 import Colors from "./components/Debug.vue";
 
 /**
@@ -22,5 +29,6 @@ const app = new Vue({
   components: {
     App,
     Colors,
+    LoginPage
   }
 });

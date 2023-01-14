@@ -14,12 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
-        return $request->user();
+        return auth()->user();
     });
 
     Route::get('/planning', function () {
 
     });
 });
+
+Route::prefix('auth')->group(function () {
+    Route::post('login', [\App\Http\Controllers\SanctumAuthController::class, 'login'])->name('login');
+    Route::post('register', [\App\Http\Controllers\SanctumAuthController::class, 'register'])->name('register');
+});
+
