@@ -11,6 +11,10 @@ Vue.use(require('vue-moment'), {
   moment
 });
 
+import { createPinia, PiniaVuePlugin} from "pinia";
+Vue.use(PiniaVuePlugin);
+const pinia = createPinia();
+
 import Vue from "vue";
 import vuetify from './vuetify';
 import App from "./components/App.vue";
@@ -26,6 +30,7 @@ import Colors from "./components/Debug.vue";
 const app = new Vue({
   el: '#app',
   vuetify,
+  pinia,
   components: {
     App,
     Colors,

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SanctumAuthController extends Controller
@@ -17,21 +17,21 @@ class SanctumAuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $username = $request->input('username');
+        $email = $request->input('username');
         $password = $request->input('password');
         $user = false;
 
-        if (User::whereEmail($username)->exists()) {
-            $user = User::whereEmail($username)->first();
+        if (User::whereEmail($email)->exists()) {
+            $user = User::whereEmail($email)->first();
         } else {
             abort(404);
         }
 
         $credentials = ['email' => $user->getRawOriginal('email'), 'password' => $password];
         if (Auth::attempt($credentials)) {
-//            $request->session()->regenerate();
-            session()->regenerate();
-            return response(['success' => auth()->user()->id]);
+            $request->session()->regenerate();
+
+            return response(['success' => auth()->user()]);
         } else {
             return response(['success' => false], 404);
         }
@@ -39,8 +39,6 @@ class SanctumAuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        dump("plop");
-
         $user = User::create([
           'name' => $request->input('name'),
           'email' => $request->input('email'),
@@ -49,10 +47,14 @@ class SanctumAuthController extends Controller
 
         $credentials = ['email' => $request->input('email'), 'password' => $request->input('password')];
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
             return response(['success' => auth()->user()->id]);
         } else {
             return response(['success' => false], 404);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
     }
 }

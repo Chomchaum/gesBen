@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Requests\GetUserRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,17 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/user', function (Request $request) {
-        return auth()->user();
-    });
+
 
     Route::get('/planning', function () {
 
     });
 });
 
-Route::prefix('auth')->group(function () {
-    Route::post('login', [\App\Http\Controllers\SanctumAuthController::class, 'login'])->name('login');
-    Route::post('register', [\App\Http\Controllers\SanctumAuthController::class, 'register'])->name('register');
-});
+Route::get('/logout', [\App\Http\Controllers\SanctumAuthController::class, 'logout']);
 
+Route::get('/user', function (GetUserRequest $request) {
+    return auth()->user();
+});

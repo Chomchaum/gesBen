@@ -19,6 +19,7 @@ export default new Vuetify({
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#ff9c07',
+        mybackground: '#ababab',
       },
       dark: {
         primary: '#2196F3',
@@ -27,6 +28,7 @@ export default new Vuetify({
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#ff9c07',
+        mybackground: '#1e1e1e',
       },
       darker: {
         primary: '#ffffff',
@@ -36,6 +38,7 @@ export default new Vuetify({
         info: '#777777',
         success: '#555555',
         warning: '#33aa33',
+        background: '#1e1e1e',
       },
     },
     dark: true,

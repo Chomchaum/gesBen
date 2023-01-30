@@ -1,7 +1,23 @@
 <template>
-  <v-navigation-drawer app clipped width="10%">
+  <v-navigation-drawer app clipped>
+    <v-list-item class="px-2">
+      <v-list-item-avatar color="indigo" class="my-4">
+        <v-icon dark>mdi-account</v-icon>
+      </v-list-item-avatar>
+      <v-list-item-content>
+        <v-list-item-title class="text-h6">
+          Prénom
+        </v-list-item-title>
+        <v-list-item-subtitle>
+          Mon Compte
+        </v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-divider></v-divider>
+
     <v-list
-      :dense="(this.$vuetify.breakpoint.name!='xl')"
+      :dense="false"
       nav
     >
       <v-list-item
@@ -18,6 +34,14 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+    <template v-slot:append>
+        <v-img
+          :max-height="220"
+          contain
+          eager
+          src="https://p.calameoassets.com/190513145100-e426154fc616d70b07ea3fc25b7fe9ef/p1.jpg"
+        ></v-img>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -31,5 +55,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

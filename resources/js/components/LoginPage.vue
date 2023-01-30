@@ -4,7 +4,12 @@
       <v-card-title>Register</v-card-title>
       <form>
         <v-text-field
-          v-model="register.name"
+          v-model="register.firstname"
+          label="Prénom"
+          type="text"
+        ></v-text-field>
+        <v-text-field
+          v-model="register.lastname"
           label="Nom"
           type="text"
         ></v-text-field>
@@ -49,36 +54,34 @@ export default {
   data() {
     return {
       register: {
-        name: null,
+        firstname: null,
+        lastname: null,
         useremail: null,
         password: null,
       },
       login: {
-        username: null,
-        password: null,
+        username: 'a@a.a',
+        password: 'a',
       },
     }
   },
 
+  setup() {
+     axios.get('http://localhost:8000/sanctum/csrf-cookie')
+  },
+
   methods: {
-    getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
-    },
     submitLogin() {
-      axios.get('sanctum/csrf-cookie').then((cookie) => {
-        axios.post('api/auth/login', {
-          username: this.login.username,
-          password: this.login.password
-        }).then((res) => {
-          console.log(res);
-        });
-      })
+      axios.post('http://localhost:8000/auth/login', {
+        username: this.login.username,
+        password: this.login.password
+      }).then((res) => {
+        console.log(res);
+      });
     },
     submitRegister() {
-      axios.post('api/auth/register', {
-        name: this.register.name,
+      axios.post('http://localhost:8000/auth/register', {
+        name: this.register.firstname.concat(' ', this.register.lastname),
         email: this.register.useremail,
         password: this.register.password
       }).then((res) => {
@@ -86,7 +89,7 @@ export default {
       });
     },
     pwet() {
-      axios.get('api/user').then((res) => {
+      axios.get('http://localhost:8000/api/user').then((res) => {
         console.log(res);
       })
     },
