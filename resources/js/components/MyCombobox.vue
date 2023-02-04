@@ -20,12 +20,12 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Aucun poste correspondant à
+              {{ $t('aucunPosteCorrespondant') }}
               <v-chip :color="`${colors[nonce - 1]} lighten-2`"
                       label
                       small>{{ search }}
               </v-chip>
-               Appuyez sur <kbd class="mb-1">Entrée</kbd> pour le créer
+              <p v-html="">{{ $t('ajoutAncienPosteTip') }}</p>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>

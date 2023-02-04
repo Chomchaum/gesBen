@@ -6,26 +6,26 @@
       <color-ctr class="align-center">
         <v-switch v-model="isDarkTheme" :label="((isDarkTheme) ? 'Dark' : 'White') + ' Theme'"></v-switch>
         <v-btn color="primary">
-          Primary
+          {{ $t('primary') }}
         </v-btn>
         <v-btn color="secondary">
-          Secondary
+          {{ $t('secondary') }}
         </v-btn>
         <v-btn color="accent"
                :class="(()=>{if(isDarkTheme) return {'theme--dark':true}; return {'theme--light':true};})()">
-          Accent
+          {{ $t('accent') }}
         </v-btn>
         <v-btn color="error">
-          Error
+          {{ $t('error') }}
         </v-btn>
         <v-btn color="info">
-          Info
+          {{ $t('info') }}
         </v-btn>
         <v-btn color="success">
-          Success
+          {{ $t('success') }}
         </v-btn>
         <v-btn color="warning">
-          Warning
+          {{ $t('warning') }}
         </v-btn>
       </color-ctr>
     </v-card>

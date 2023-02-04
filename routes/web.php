@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome', ['name' => 'App']);
 
-Route::view('/login', 'login');
+Route::view('/register', 'register');
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [\App\Http\Controllers\SanctumAuthController::class, 'login'])->name('login');
