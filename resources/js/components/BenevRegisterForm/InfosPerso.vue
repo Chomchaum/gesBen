@@ -94,9 +94,8 @@
       </v-card-text>
 
       <v-card-actions>
-        <!-- ///todo Réactiver le disabler sur mail null -->
         <v-btn
-          :disabled="false"
+          :disabled="!infosPerso.valid || infosPerso.values.email === null"
           color="success"
           class="mr-4"
           @click="submit"
@@ -118,12 +117,15 @@
 
 <script>
 import {useRegisterStore} from "../../stores/Register";
+import moment from "moment";
 
 export default {
   name: "InfosPerso",
 
   data: () => ({
     infosPerso: {
+      ///todo Ajouter le choix de code postal
+
       values: {
         name: null,
         firstname: null,
@@ -169,6 +171,9 @@ export default {
         case 'xl': return true
         default: return false
       }
+    },
+    isUnderage () {
+      return moment().diff(moment(this.infosPerso.values.birthdate), 'years') < 18;
     }
   },
 
@@ -194,6 +199,10 @@ export default {
         name: this.infosPerso.values.name,
         firstname: this.infosPerso.values.firstname,
         email: this.infosPerso.values.email,
+        phone: this.infosPerso.values.phone,
+        birthdate: this.infosPerso.values.birthdate,
+        isUnderage: this.isUnderage,
+        size: this.infosPerso.values.taille,
       });
 
       this.$emit('continue');

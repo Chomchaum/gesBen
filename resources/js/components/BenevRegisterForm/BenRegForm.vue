@@ -11,7 +11,6 @@
         Informations Personnelles
         <small>Quelques informations pour mieux vous connaître</small>
       </v-stepper-step>
-
       <my-stepper-content cur-step="1">
         <infos-perso v-on:continue="stepUp(1)"></infos-perso>
       </my-stepper-content>
@@ -22,7 +21,6 @@
       >
         Votre expérience en tant que bénévole
       </v-stepper-step>
-
       <my-stepper-content cur-step="2">
         <benevolat v-on:continue="formStep += 1"></benevolat>
       </my-stepper-content>
@@ -33,7 +31,6 @@
       >
         Vos disponibilités
       </v-stepper-step>
-
       <my-stepper-content cur-step="3">
         <disponibilites v-on:continue="formStep += 1"></disponibilites>
       </my-stepper-content>
@@ -45,9 +42,8 @@
         Créez un compte
         <small>Visualisez votre planning à tout moment</small>
       </v-stepper-step>
-
       <my-stepper-content cur-step="4">
-        <account-register v-on:continue="formStep = 1" ref="account_register"></account-register>
+        <account-register v-on:continue="formStep = 1" v-on:submit="submitReg" ref="account_register"></account-register>
       </my-stepper-content>
 
     </v-stepper>
@@ -59,7 +55,7 @@ import InfosPerso from "./InfosPerso.vue";
 import Benevolat from "./Benevolat.vue";
 import Disponibilites from "./Disponibilites.vue";
 import AccountRegister from "./AccountRegister.vue";
-import MyStepperContent from "./MyStepperContent.vue";
+import MyStepperContent from "../MyStepperContent.vue";
 import {useRegisterStore} from "../../stores/Register";
 
 export default {
@@ -74,7 +70,7 @@ export default {
   },
 
   data: () => ({
-    formStep: 1,
+    formStep: 3,
   }),
 
   setup() {
@@ -84,12 +80,15 @@ export default {
   methods: {
     stepUp(n = 1) {
       if (this.formStep === 3) {
-        this.$refs.account_register.init();
       }
 
       this.formStep += n
       return this.formStep
-    }
+    },
+
+    submitReg() {
+      return true
+    },
   }
 }
 </script>

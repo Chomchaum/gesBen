@@ -6,10 +6,18 @@ require('./bootstrap');
  */
 
 const moment = require('moment')
+require('moment/locale/br')
+moment.updateLocale('br', {
+  meridiem: function (hour, minute, isLower) {
+    var str = hour < 12 ? ('a.m.') : 'g.m.';
+    return isLower ? str : str.toUpperCase();
+  },
+})
 require('moment/locale/fr')
-Vue.use(require('vue-moment'), {
-  moment
-});
+moment.locale('fr')
+// Vue.use(require('vue-moment'), {
+//   moment
+// });
 
 import { createPinia, PiniaVuePlugin} from "pinia";
 Vue.use(PiniaVuePlugin);

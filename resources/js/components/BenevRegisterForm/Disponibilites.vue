@@ -1,5 +1,36 @@
 <template>
   <v-card flat class="pa-4">
+    <!--  Dialog de confirmation  -->
+    <v-dialog
+      v-model="delDialog"
+      max-width="390"
+    >
+      <v-card>
+        <v-card-title>
+          Retirer cette disponibilité ?
+        </v-card-title>
+        <v-card-text>
+          Pour modifier votre disponibilité, vous pouvez supprimer cette plage et en créer une nouvelle
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="error darken-1"
+            text
+            @click="delDialog = false"
+          >
+            Annuler
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="delDispo"
+          >
+            Supprimer
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-card-title>Ajoutez des plages pour chacune de vos disponibilités</v-card-title>
     <v-card-text>
       <v-form ref="createDispoForm">
@@ -7,23 +38,23 @@
           <v-col cols="12" sm="4">
             <my-date-time
               label="Début de la plage"
-              :min="eventStart"
-              :max="calendarForm.end === null ? eventEnd : addHours(calendarForm.end, -2)"
-              v-on:input="calendarForm.start=$event"
+              :min="calendar.start"
+              :max="dispoForm.end === null ? calendar.end : addHours(dispoForm.end, -2)"
+              v-on:input="dispoForm.start=$event"
             />
           </v-col>
           <v-col cols="12" sm="4">
             <my-date-time
               label="Fin de la plage"
-              :min="calendarForm.start === null ? eventStart : addHours(calendarForm.start, 2)"
-              :max="eventEnd"
-              v-on:input="calendarForm.end=$event"
+              :min="dispoForm.start === null ? calendar.start : addHours(dispoForm.start, 2)"
+              :max="calendar.end"
+              v-on:input="dispoForm.end=$event"
             />
           </v-col>
           <v-col cols="12" sm="4" style="display: flex; align-items: center; justify-content: center">
             <v-btn
               class="mb-3"
-              :disabled="(calendarForm.start == null || calendarForm.end == null)"
+              :disabled="(dispoForm.start == null || dispoForm.end == null)"
               @click="addDispo()"
             >
               Ajouter une plage
@@ -31,31 +62,58 @@
           </v-col>
         </v-row>
       </v-form>
+
       <v-calendar
         style="height: 48vh"
         color="primary"
         type="custom-daily"
-        locale="br"
+        locale="fr"
         :short-weekdays="false"
         :weekdays="[1,2,3,4,5,6,0]"
         :interval-format="intervalFormatter"
-        start="2023-06-30"
-        end="2023-07-02"
+        :weekday-format="weekdayFormatter"
+        :start="calendar.start"
+        :end="calendar.end"
         :events="dispos"
         @click:event="clickEvent($event)"
       >
+        <template v-slot:event="{ event }"
+        >
+          <v-container
+            color="primary"
+          >
+            <v-row>
+              <v-col cols="12" sm="11">
+                {{ event.horaires }}
+              </v-col>
+              <v-col cols="12" sm="1">
+                <v-icon
+                >
+                  mdi-close-thick
+                </v-icon>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
       </v-calendar>
     </v-card-text>
+
     <v-card-actions>
       <v-btn
         color="success"
-        @click="$emit('continue')"
+        class="mr-4"
+        @click="submit"
       >
         Continuer
       </v-btn>
-      <v-btn color="error">
+
+      <v-btn
+        color="error"
+        @click="clear"
+      >
         Effacer
       </v-btn>
+
     </v-card-actions>
   </v-card>
 </template>
@@ -64,6 +122,7 @@
 import MyTimePicker from "../myTimePicker.vue";
 import MyDateTime from "../MyDateTime.vue";
 import moment from "moment";
+import {useRegisterStore} from "../../stores/Register";
 
 export default {
   name: "Disponibilites",
@@ -74,28 +133,29 @@ export default {
   },
 
   data: () => ({
-    calendarForm: {
+    dispoForm: {
       start: null,
       end: null,
       date: '2023-07-01',
     },
-
-    eventStart: '2023-06-30 16:00',
-    eventEnd: '2023-07-02 14:00',
-    dates: [
-      '2023-06-30',
-      '2023-07-01',
-      '2023-07-02',
+    autoIncrementId: 3,
+    dispos: [
+      {"start": "2023-07-01 10:30", "end": "2023-07-01 13:00", "id": 0, "horaires": "10:30 - 13:00"},
+      {"start": "2023-06-30 10:30", "end": "2023-06-30 13:00", "id": 1, "horaires": "10:30 - 13:00"},
+      {"start": "2023-07-02 10:30", "end": "2023-07-02 13:00", "id": 2, "horaires": "10:30 - 13:00"},
     ],
 
-    autoIncrementId: 1,
-    dispos: [{"start": "2023-07-01 10:30", "end": "2023-07-01 13:00", "id": 0}],
-    selectedEvent: null,
+    calendar: {
+      start: '2023-06-30 16:00',
+      end: '2023-07-02 14:00',
+      selectedDispoId: null,
+    },
+    delDialog: false,
   }),
 
   methods: {
-    log_moment() {
-      return moment()
+    log_moment(timestamp, format) {
+      return moment(timestamp).format(format)
     },
 
     addHours(datetime, hours) {
@@ -106,25 +166,55 @@ export default {
       // Ajoute la dispo au calendrier
       this.dispos.push({
         id: this.autoIncrementId,
-        start: this.calendarForm.start,
-        end: this.calendarForm.end,
+        start: this.dispoForm.start,
+        end: this.dispoForm.end,
+        horaires: moment(this.dispoForm.start).format('LT') + ' - ' + moment(this.dispoForm.end).format('LT'),
       })
 
       ++this.autoIncrementId;
 
       // Reset les champs
       this.$refs.createDispoForm.reset();
-      this.calendarForm.start = null;
-      this.calendarForm.end = null;
+      this.dispoForm.start = null;
+      this.dispoForm.end = null;
     },
+
     ///todo Ajouter la suppression des events
-    intervalFormatter(locale) {
-      return locale.time
+    delDispo() {
+      const id = this.calendar.selectedDispoId;
+      const dispoIndex = this.dispos.findIndex((dispo) => dispo.id === id);
+
+      if (dispoIndex > -1) {
+        this.dispos.splice(dispoIndex, 1);
+        this.calendar.selectedDispoId = null;
+        this.delDialog = false;
+      }
+    },
+
+    intervalFormatter(timestamp) {
+      return moment(timestamp).format('HH:mm')
+    },
+    weekdayFormatter(timestamp) {
+      return moment(timestamp.date).format('dddd')
     },
 
     clickEvent(event) {
-      console.log(event);
-      return false;
+      this.calendar.selectedDispoId = event.event.id
+      this.delDialog = true;
+    },
+
+    clear() {
+      this.$refs.createDispoForm.reset()
+      this.dispos = [];
+    },
+
+    submit() {
+      const store = useRegisterStore();
+      store.$patch({
+        availRanges: this.dispos,
+      });
+
+      this.$emit('continue');
     }
   }
 }

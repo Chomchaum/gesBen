@@ -11,7 +11,9 @@
         :label="label"
         :disabled="disabled"
         prepend-icon="mdi-calendar-clock"
-        readonly
+        mask="YYYY-MM-DD HH:mm"
+        :min="(min == null ? undefined : min.split(' ')[0])"
+        :max="(max == null ? undefined : max.split(' ')[0])"
         v-bind="attrs"
         v-on="on"
       ></v-text-field>
@@ -22,6 +24,10 @@
       first-day-of-week="1"
       locale="fr"
       :active-picker.sync="activeDatePicker"
+      :weekday-format="weekdayFormatter"
+      :title-date-format="titleDateFormatter"
+      :header-date-format="headerDateFormatter"
+      :month-format="monthFormatter"
       :min="(min == null ? undefined : min.split(' ')[0])"
       :max="(max == null ? undefined : max.split(' ')[0])"
       v-if="datePick"
@@ -40,6 +46,8 @@
 </template>
 
 <script>
+import moment from "moment/moment";
+
 export default {
   name: "myDateTime",
 
@@ -70,9 +78,14 @@ export default {
         }
       },
       set: function (newValue) {
-        let newValues = newValue.split(' ')
-        this.date = newValues[0]
-        this.time = newValues[1]
+        if (newValue == null) {
+          this.date = null
+          this.time = null
+        } else {
+          let newValues = newValue.split(' ')
+          this.date = newValues[0]
+          this.time = newValues[1]
+        }
       }
     },
     minTime: function () {
@@ -90,6 +103,20 @@ export default {
   },
 
   methods: {
+    weekdayFormatter(timestamp){
+      return moment(timestamp).format('dd')[0].toUpperCase()
+    },
+    monthFormatter(timestamp){
+      return moment(timestamp).format('MMM')
+    },
+    titleDateFormatter(timestamp){
+      console.log(timestamp)
+      return moment(timestamp).format('dddd D MMM')
+    },
+    headerDateFormatter(timestamp){
+      return moment(timestamp).format('YYYY')
+    },
+
     save(time) {
       this.$refs.dialog.save(time);
       this.datePick=true;

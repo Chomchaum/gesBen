@@ -5,12 +5,12 @@
       :items="items"
       :search-input.sync="search"
       :disabled="disabled"
-      solo-inverted
+      filled
       hide-selected
       class="ml-4"
       flat
-      label="Ajoutez vos anciens postes"
-      hint="Maximum 2 postes"
+      :label="label"
+      :hint="hint"
       persistent-hint
       multiple
       small-chips
@@ -71,6 +71,8 @@ export default {
   props: [
     'items',
     'disabled',
+    'label',
+    'hint',
   ],
 
   data: () => ({

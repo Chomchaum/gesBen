@@ -1,12 +1,13 @@
 <template>
   <v-select
     filled
-    single-line
     clearable
     :items="listePostes"
+    persistent-label
     :label="'Choix n°'+numChoix"
     :item-disabled="disablePoste"
     v-on:input="$emit('input', $event)"
+    v-on:keydown="(['Delete', 'Backspace'].includes($event.key) ? selectValue = null : false)"
     v-model="selectValue"
   >
     <template v-slot:item="{item, attrs, on }">
@@ -40,7 +41,8 @@ export default {
     showProgress: true,
   }),
 
-  computed: {},
+  computed: {
+  },
 
   methods: {
     /**
@@ -109,7 +111,15 @@ export default {
       }
 
       return (this.progress(item) >= 100 || this.otherChoices.includes(item.value));
-    }
+    },
+
+    keyDown(event) {
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        this.selectValue = null;
+      } else {
+        console.log(event.key)
+      }
+    },
   }
 }
 </script>
