@@ -22,10 +22,10 @@
         {{ $t('expBenevole') }}
       </v-stepper-step>
       <my-stepper-content cur-step="2">
-        <benevolat v-on:continue="formStep += 1"></benevolat>
+        <benevolat v-on:continue="formStep = 1" v-on:submit="submitReg" :loading="loading"></benevolat>
       </my-stepper-content>
 
-      <v-stepper-step
+<!--      <v-stepper-step
         :complete="formStep > 3"
         step="3"
       >
@@ -33,7 +33,7 @@
       </v-stepper-step>
       <my-stepper-content cur-step="3">
         <disponibilites v-on:continue="formStep = 1" v-on:submit="submitReg" :loading="loading"></disponibilites>
-      </my-stepper-content>
+      </my-stepper-content>-->
 
       <!--      <v-stepper-step
               :complete="formStep > 4"
@@ -70,7 +70,7 @@ export default {
   },
 
   data: () => ({
-    formStep: 1,
+    formStep: 2,
     user_id: null,
     password: null,
     loading: false,

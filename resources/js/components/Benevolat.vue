@@ -43,8 +43,8 @@
           <v-card-subtitle>
             <v-radio-group
               v-model="ancienBenevole"
-              mandatory
               class="ml-4"
+              hide-details
               row
             >
               <v-radio
@@ -58,8 +58,7 @@
             </v-radio-group>
           </v-card-subtitle>
 
-          <v-card-text>
-            <h3 class="mb-2">{{ $t('ancienPosteQuestion') }}</h3>
+          <v-card-text class="pb-1">
             <my-combobox
               :disabled="!ancienBenevole"
               v-model="anciensPostesChips"
@@ -75,7 +74,7 @@
           <v-card-title>{{ $t('choixPosteQuestion') }}</v-card-title>
           <v-card-subtitle><span class="warning--text text--lighten-2">{{ $t('choixPosteNonGaranti') }}</span>
           </v-card-subtitle>
-          <v-card-text>
+          <v-card-text class="pb-1">
             <v-row>
               <v-col cols="12" sm="4" v-for="choixPoste in choixPostes"
                      v-bind:key="choixPoste.numChoix">
@@ -91,12 +90,33 @@
           </v-card-text>
         </v-card>
 
-    <!--  Input de commentaire  -->
+        <!--    Disponibilités    -->
         <v-card color="#333" class="pa-2 pb-0 mb-3">
-          <v-card-title class="pb-0">
-            {{ $t('infosCompl') }}
+          <v-card-title>
+            {{ $t('vosDispos') }}
           </v-card-title>
-          <v-card-text class="pt-0">
+          <v-card-text>
+            <v-row>
+              <v-col class="premcol"></v-col>
+              <v-col class="autrecol">Matin</v-col>
+              <v-col class="autrecol">Après-midi</v-col>
+              <v-col class="autrecol">Soirée</v-col>
+            </v-row>
+            <div v-for="jour in dispos" :key="jour.date">
+              <v-divider class="my-2"/>
+              <v-row>
+              <v-col class="premcol">{{ jour.date }}</v-col>
+              <v-col v-for="creneau in jour.periodes" :key="creneau.label" class="autrecol">
+                <v-simple-checkbox v-model="creneau.value" :disabled="creneau.disabled"></v-simple-checkbox>
+              </v-col>
+              </v-row>
+            </div>
+          </v-card-text>
+        </v-card>
+
+        <!--  Input de commentaire  -->
+        <v-card color="#333" class="pa-2 pb-0 mb-3">
+          <v-card-text>
             <v-textarea
               v-model="comment"
               rows="3"
@@ -113,15 +133,24 @@
           color="success"
           class="mr-4"
           @click="confirmSubmit"
+          :loading="loading"
         >
           {{ $t('continuer') }}
         </v-btn>
 
         <v-btn
           color="error"
+          class="mr-4"
           @click="clear"
         >
           {{ $t('effacer') }}
+        </v-btn>
+
+        <v-btn
+          color="warning"
+          @click="$emit('continue')"
+        >
+          {{ $t('annuler') }}
         </v-btn>
 
       </v-card-actions>
@@ -150,8 +179,40 @@ export default {
       {numChoix: 2, value: 'Bar'},
       {numChoix: 3, value: null},
     ],
+
+    ///todo Récupérer les dates en DB
+    dispos: [
+      {
+        date: 'Vendredi 8 juillet', periodes: [
+          {label: 'matin', value: false, disabled: true},
+          {label: 'après-midi', value: false, disabled: false},
+          {label: 'soirée', value: false, disabled: false},
+        ]
+      },
+      {
+        date: 'Jour 2', periodes: [
+          {label: 'matin', value: false, disabled: false},
+          {label: 'après-midi', value: false, disabled: false},
+          {label: 'soirée', value: false, disabled: false},
+        ]
+      },
+      {
+        date: 'Jour 3', periodes: [
+          {label: 'matin', value: false, disabled: false},
+          {label: 'après-midi', value: false, disabled: false},
+          {label: 'soirée', value: false, disabled: false},
+        ]
+      },
+      {
+        date: 'Jour 4', periodes: [
+          {label: 'matin', value: false, disabled: false},
+          {label: 'après-midi', value: false, disabled: true},
+          {label: 'soirée', value: false, disabled: true},
+        ]
+      },
+    ],
     noChoiceDialog: false,
-    anciensPostesChips: [{text: 'Bar', color: 'red',},{text: 'Parking', color: 'purple',}],
+    anciensPostesChips: [{text: 'Bar', color: 'red',}, {text: 'Parking', color: 'purple',}],
 
     ///todo Utiliser la liste des postes pour les exemples
     examplesAnciensPostes: [
@@ -227,12 +288,18 @@ export default {
         comment: this.comment,
       });
 
-      this.$emit('continue');
+      this.$emit('submit');
     }
   },
 }
 </script>
 
 <style scoped>
-
+.premcol {
+  flex-grow: 2;
+}
+.autrecol {
+  flex-grow: 3;
+  text-align: center;
+}
 </style>
