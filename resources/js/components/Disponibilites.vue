@@ -7,10 +7,10 @@
     >
       <v-card>
         <v-card-title>
-          {{ $t('retirerCetteDisponibilit') }}
+          {{ $t('retirerCetteDispo') }}
         </v-card-title>
         <v-card-text>
-          {{ $t('pourModifierVotreDisponibilitVousPouvezSupprimerCe') }}
+          {{ $t('dispoDelDialogText') }}
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -37,7 +37,7 @@
         <v-row>
           <v-col cols="12" sm="4">
             <my-date-time
-              :label="$t('debutDeLaPlageHoraire')"
+              :label="$t('debutDeLaPlage')"
               :min="calendar.start"
               :max="dispoForm.end === null ? calendar.end : addHours(dispoForm.end, -2)"
               v-on:input="dispoForm.start=$event"
@@ -45,7 +45,7 @@
           </v-col>
           <v-col cols="12" sm="4">
             <my-date-time
-              :label="$t('finDeLaPlageHoraire')"
+              :label="$t('finDeLaPlage')"
               :min="dispoForm.start === null ? calendar.start : addHours(dispoForm.start, 2)"
               :max="calendar.end"
               v-on:input="dispoForm.end=$event"
@@ -103,13 +103,14 @@
         color="success"
         class="mr-4"
         @click="submit"
+        :loading="loading"
       >
         {{ $t('continuer') }}
       </v-btn>
 
       <v-btn
         color="error"
-        @click="clear"
+        @click="$emit('continue')"
       >
         {{ $t('effacer') }}
       </v-btn>
@@ -127,6 +128,8 @@ import {useRegisterStore} from "../stores/Register";
 export default {
   name: "Disponibilites",
 
+  props: ['loading'],
+
   components: {
     MyTimePicker,
     MyDateTime,
@@ -136,13 +139,63 @@ export default {
     dispoForm: {
       start: null,
       end: null,
-      date: '2023-07-01',
     },
     autoIncrementId: 3,
     dispos: [
-      {"start": "2023-07-01 10:30", "end": "2023-07-01 13:00", "id": 0, "horaires": "10:30 - 13:00"},
-      {"start": "2023-06-30 10:30", "end": "2023-06-30 13:00", "id": 1, "horaires": "10:30 - 13:00"},
-      {"start": "2023-07-02 10:30", "end": "2023-07-02 13:00", "id": 2, "horaires": "10:30 - 13:00"},
+      {
+        "id": 3,
+        "start": "2023-06-30 16:00",
+        "end": "2023-06-30 22:00",
+        "horaires": "16:00 - 22:00"
+      },
+      {
+        "id": 4,
+        "start": "2023-06-30 18:00",
+        "end": "2023-06-30 20:00",
+        "horaires": "18:00 - 20:00"
+      },
+      {
+        "id": 5,
+        "start": "2023-07-01 13:00",
+        "end": "2023-07-01 17:00",
+        "horaires": "13:00 - 17:00"
+      },
+      {
+        "id": 6,
+        "start": "2023-07-01 15:00",
+        "end": "2023-07-01 19:00",
+        "horaires": "15:00 - 19:00"
+      },
+      {
+        "id": 7,
+        "start": "2023-07-01 16:00",
+        "end": "2023-07-01 20:00",
+        "horaires": "16:00 - 20:00"
+      },
+      {
+        "id": 8,
+        "start": "2023-07-02 09:00",
+        "end": "2023-07-02 11:00",
+        "horaires": "09:00 - 11:00"
+      },
+      {
+        "id": 9,
+        "start": "2023-07-02 12:00",
+        "end": "2023-07-02 14:00",
+        "horaires": "12:00 - 14:00"
+      },
+      {
+        "id": 10,
+        "start": "2023-07-01 23:00",
+        "end": "2023-07-02 06:00",
+        "horaires": "23:00 - 06:00"
+      },
+      {
+        "id": 11,
+        "start": "2023-07-02 03:00",
+        "end": "2023-07-02 07:00",
+        "horaires": "03:00 - 07:00"
+      }
     ],
 
     calendar: {
@@ -152,6 +205,9 @@ export default {
     },
     delDialog: false,
   }),
+
+  setup() {
+  },
 
   methods: {
     log_moment(timestamp, format) {
@@ -206,16 +262,18 @@ export default {
     clear() {
       this.$refs.createDispoForm.reset()
       this.dispos = [];
+
+      this.$emit('continue')
     },
 
     submit() {
       const store = useRegisterStore();
       store.$patch({
-        availRanges: this.dispos,
+        plagesDispo: this.dispos,
       });
 
-      this.$emit('continue');
-    }
+      this.$emit('submit');
+    },
   }
 }
 </script>

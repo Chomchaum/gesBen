@@ -21,28 +21,27 @@ moment.locale('fr')
 
 import Vue from "vue";
 import vuetify from './vuetify';
-
-import { createPinia, PiniaVuePlugin} from "pinia";
-Vue.use(PiniaVuePlugin);
-const pinia = createPinia();
-
-import VueI18n from "vue-i18n";
-import * as en from '../lang/en/messages.json';
-import * as fr from '../lang/fr/messages.json';
-import * as br from '../lang/br/messages.json';
-const intlMessages = {
-  'en': en,
-  'fr': fr,
-  'br': br,
-};
-
-
-/**
- * Main pages components import
- */
+import {createPinia, PiniaVuePlugin} from "pinia";
 
 import App from "./components/Pages/App.vue";
 import RegisterPage from "./components/Pages/RegisterPage.vue";
+
+import VueI18n from "vue-i18n";
+import en from '../lang/en/messages.json';
+import fr from '../lang/fr/messages.json';
+import br from '../lang/br/messages.json';
+
+Vue.use(PiniaVuePlugin);
+Vue.use(VueI18n)
+
+const pinia = createPinia();
+const i18n = new VueI18n({
+  locale: 'fr',
+  fallbackLocale: 'fr',
+  messages: {
+    en, fr, br
+  }
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -54,6 +53,7 @@ const app = new Vue({
   el: '#app',
   vuetify,
   pinia,
+  i18n,
   components: {
     App,
     RegisterPage,

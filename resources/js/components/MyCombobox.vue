@@ -1,13 +1,13 @@
 <template>
   <v-container fluid>
     <v-combobox
+      class="customedLabel"
       v-model="model"
       :items="items"
       :search-input.sync="search"
       :disabled="disabled"
       filled
       hide-selected
-      class="ml-4"
       flat
       :label="label"
       :hint="hint"
@@ -20,12 +20,12 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              {{ $t('aucunPosteCorrespondant') }}
+              {{ $t('ancienPosteAjoutTipstart') }}
               <v-chip :color="`${colors[nonce - 1]} lighten-2`"
                       label
                       small>{{ search }}
               </v-chip>
-              <p v-html="">{{ $t('ajoutAncienPosteTip') }}</p>
+              <span v-html="$t('createOnKbdInputTip', ['<kbd class=\'mb-1\'>', '</kbd>' ])"></span>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>

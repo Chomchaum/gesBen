@@ -1,7 +1,6 @@
 <template>
   <v-navigation-drawer
     app
-    permanent
     clipped
     bottom
   >

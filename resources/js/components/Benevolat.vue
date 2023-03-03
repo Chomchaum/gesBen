@@ -6,12 +6,12 @@
     >
       <v-card>
         <v-card-title>
-          {{ $t('pasDePrfrences') }}
+          {{ $t('noPrefQuestion') }}
         </v-card-title>
         <v-card-text>
-          <p class="mb-1">{{ $t('vousAvezValidLeFormulaireSansFournirDePostePrfrent') }}</p>
-          <p>{{ $t('voulezvousVraimentContinuer') }}</p>
-          <h3 class="success--text">{{ $t('merciPourVotreFlexibilit') }}</h3>
+          <p class="mb-1">{{ $t('regExpeBenevoleDialogText') }}</p>
+          <p>{{ $t('confirmationQuestion') }}</p>
+          <h3 class="success--text">{{ $t('merciFlex') }}</h3>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -59,12 +59,12 @@
           </v-card-subtitle>
 
           <v-card-text>
-            <h3 class="mb-2">{{ $t('anciensPostesQuestion') }}</h3>
+            <h3 class="mb-2">{{ $t('ancienPosteQuestion') }}</h3>
             <my-combobox
               :disabled="!ancienBenevole"
               v-model="anciensPostesChips"
               :items="examplesAnciensPostes"
-              :label="$t('ajoutezVosAnciensPostes')"
+              :label="$t('ancienPosteLabel')"
               hint="Maximum 2 postes"
             />
           </v-card-text>
@@ -144,14 +144,14 @@ export default {
   data: () => ({
     valid: true,
 
-    ancienBenevole: false,
+    ancienBenevole: true,
     choixPostes: [
-      {numChoix: 1, value: null},
-      {numChoix: 2, value: null},
+      {numChoix: 1, value: 'Brigade Verte'},
+      {numChoix: 2, value: 'Bar'},
       {numChoix: 3, value: null},
     ],
     noChoiceDialog: false,
-    anciensPostesChips: [],
+    anciensPostesChips: [{text: 'Bar', color: 'red',},{text: 'Parking', color: 'purple',}],
 
     ///todo Utiliser la liste des postes pour les exemples
     examplesAnciensPostes: [
@@ -174,7 +174,7 @@ export default {
       {text: 'Catering', value: 'Catering', teamSize: 12, candidats: 12},
     ],
 
-    comment: null,
+    comment: "plop",
   }),
 
   computed: {
@@ -222,8 +222,8 @@ export default {
     submit() {
       const store = useRegisterStore();
       store.$patch({
-        exOffices: this.anciensPostes,
-        chosenOffices: this.choixPostes,
+        exPostes: this.anciensPostes,
+        choixPostes: this.choixPostes,
         comment: this.comment,
       });
 

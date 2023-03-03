@@ -1,3 +1,5 @@
 {
-  "key": "talvoud"
+  "key": "talvoud",
+  "ajoutezPlagesDispo": "Please work as intended",
+  "ajoutAncienPosteTip": "Appuyez sur {0}Enter{1} pour le créer"
 }
