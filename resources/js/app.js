@@ -19,15 +19,29 @@ moment.locale('fr')
 //   moment
 // });
 
-import { createPinia, PiniaVuePlugin} from "pinia";
-Vue.use(PiniaVuePlugin);
-const pinia = createPinia();
-
 import Vue from "vue";
 import vuetify from './vuetify';
-import App from "./components/App.vue";
-import LoginPage from "./components/LoginPage.vue";
-import Colors from "./components/Debug.vue";
+import {createPinia, PiniaVuePlugin} from "pinia";
+
+import App from "./components/Pages/App.vue";
+import RegisterPage from "./components/Pages/RegisterPage.vue";
+
+import VueI18n from "vue-i18n";
+import en from '../lang/en/messages.json';
+import fr from '../lang/fr/messages.json';
+import br from '../lang/br/messages.json';
+
+Vue.use(PiniaVuePlugin);
+Vue.use(VueI18n)
+
+const pinia = createPinia();
+const i18n = new VueI18n({
+  locale: 'fr',
+  fallbackLocale: 'fr',
+  messages: {
+    en, fr, br
+  }
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -39,9 +53,9 @@ const app = new Vue({
   el: '#app',
   vuetify,
   pinia,
+  i18n,
   components: {
     App,
-    Colors,
-    LoginPage
+    RegisterPage,
   }
 });

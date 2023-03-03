@@ -1,13 +1,13 @@
 <template>
   <v-container fluid>
     <v-combobox
+      class="customedLabel"
       v-model="model"
       :items="items"
       :search-input.sync="search"
       :disabled="disabled"
       filled
       hide-selected
-      class="ml-4"
       flat
       :label="label"
       :hint="hint"
@@ -20,12 +20,12 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Aucun poste correspondant à
+              {{ $t('ancienPosteAjoutTipstart') }}
               <v-chip :color="`${colors[nonce - 1]} lighten-2`"
                       label
                       small>{{ search }}
               </v-chip>
-               Appuyez sur <kbd class="mb-1">Entrée</kbd> pour le créer
+              <span v-html="$t('createOnKbdInputTip', ['<kbd class=\'mb-1\'>', '</kbd>' ])"></span>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>

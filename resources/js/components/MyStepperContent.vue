@@ -11,10 +11,10 @@
           color="primary"
           @click="$emit('continue')"
         >
-          Continue
+          {{ $t('continuer') }}
         </v-btn>
         <v-btn text>
-          Cancel
+          {{ $t('effacer') }}
         </v-btn>
       </v-container>
     </slot>

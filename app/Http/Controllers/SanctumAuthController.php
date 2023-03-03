@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,17 +37,17 @@ class SanctumAuthController extends Controller
         }
     }
 
-    public function register(RegisterRequest $request)
+    public function register(CreateUserRequest $request)
     {
         $user = User::create([
           'name' => $request->input('name'),
           'email' => $request->input('email'),
-          'password' => $request->input('password')
+          'password' => $request->input('password'),
         ]);
 
         $credentials = ['email' => $request->input('email'), 'password' => $request->input('password')];
         if (Auth::attempt($credentials)) {
-            return response(['success' => auth()->user()->id]);
+            return response(['user_id' => auth()->user()->id]);
         } else {
             return response(['success' => false], 404);
         }
