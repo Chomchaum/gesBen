@@ -172,6 +172,7 @@ export default {
 
   data: () => ({
     valid: true,
+    loading: false,
 
     ancienBenevole: true,
     choixPostes: [

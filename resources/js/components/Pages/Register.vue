@@ -12,7 +12,7 @@
         <small>{{ $t('infosPersoSub') }}</small>
       </v-stepper-step>
       <my-stepper-content cur-step="1">
-        <infos-perso v-on:continue="getPwAndContinue($event)"></infos-perso>
+        <infos-perso-old v-on:continue="getPwAndContinue($event)"></infos-perso-old>
       </my-stepper-content>
 
       <v-stepper-step
@@ -25,39 +25,16 @@
         <benevolat v-on:continue="formStep = 1" v-on:submit="submitReg" :loading="loading"></benevolat>
       </my-stepper-content>
 
-<!--      <v-stepper-step
-        :complete="formStep > 3"
-        step="3"
-      >
-        {{ $t('vosDispos') }}
-      </v-stepper-step>
-      <my-stepper-content cur-step="3">
-        <disponibilites v-on:continue="formStep = 1" v-on:submit="submitReg" :loading="loading"></disponibilites>
-      </my-stepper-content>-->
-
-      <!--      <v-stepper-step
-              :complete="formStep > 4"
-              step="4"
-            >
-              {{ $t('creerCompte') }}
-              <small>{{ $t('visualisezVotrePlanningToutMoment') }}</small>
-            </v-stepper-step>
-            <my-stepper-content cur-step="4">
-              <account-register v-on:continue="formStep = 1" v-on:submit="submitReg" ref="account_register"></account-register>
-            </my-stepper-content>-->
-
     </v-stepper>
   </v-container>
 </template>
 
 <script>
-import InfosPerso from "../InfosPerso.vue";
+import InfosPersoOld from "../InfosPersoOld.vue";
 import Benevolat from "../Benevolat.vue";
 import Disponibilites from "../Disponibilites.vue";
 import MyStepperContent from "../MyStepperContent.vue";
 import {useRegisterStore} from "../../stores/Register";
-
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export default {
   name: "Register",
@@ -65,12 +42,12 @@ export default {
   components: {
     Disponibilites,
     Benevolat,
-    InfosPerso,
+    InfosPersoOld,
     MyStepperContent,
   },
 
   data: () => ({
-    formStep: 2,
+    formStep: 1,
     user_id: null,
     password: null,
     loading: false,

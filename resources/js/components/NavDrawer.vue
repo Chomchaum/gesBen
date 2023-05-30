@@ -4,7 +4,7 @@
     clipped
     bottom
   >
-    <v-list-item v-if="loggedIn" class="px-2" link>
+    <v-list-item v-if="user !== null" class="px-2" link>
       <v-list-item-avatar color="indigo" class="my-4">
         <v-icon dark>mdi-account</v-icon>
       </v-list-item-avatar>
@@ -16,9 +16,15 @@
           {{ $t('monCompte') }}
         </v-list-item-subtitle>
       </v-list-item-content>
+      <v-tooltip bottom color="error lighten-1" content-class="px-2 py-1">
+        <template v-slot:activator="{on, attrs}">
+          <v-icon v-bind="attrs" v-on="on" v-on:click="clog" dark class="mt-n3">mdi-logout</v-icon>
+        </template>
+        <span>Déconnexion</span>
+      </v-tooltip>
     </v-list-item>
 
-    <v-divider v-if="loggedIn"></v-divider>
+    <v-divider v-if="user !== null"></v-divider>
 
     <v-list
       :dense="false"
@@ -26,11 +32,12 @@
       nav
     >
       <v-list-item-group
-        v-model="locCurPage"
+        v-model="curPage"
         color="primary"
       >
         <v-list-item
           v-for="(item, index) in navItems"
+          @click="$emit('changePage', this.curNavItem)"
           :key="index"
           link
         >
@@ -48,8 +55,7 @@
       <v-img
         :max-height="220"
         contain
-        eager
-        src="https://p.calameoassets.com/190513145100-e426154fc616d70b07ea3fc25b7fe9ef/p1.jpg"
+        src="https://www.millenaire3.com/var/m3/storage/images/0/2/9/9/19920-3-fre-FR/A_qui_profite_le_don.png"
       ></v-img>
     </template>
   </v-navigation-drawer>
@@ -61,15 +67,20 @@ export default {
   props: [
     'curPage',
     'navItems',
+    'user',
   ],
 
   data: () => ({
-    locCurPage: 2,
-    loggedIn: false,
+    curNavItem: 2,
   }),
 
-  computed: {
-  },
+  computed: {},
+
+  methods: {
+    clog() {
+      this.$emit('logOut')
+    }
+  }
 }
 </script>
 

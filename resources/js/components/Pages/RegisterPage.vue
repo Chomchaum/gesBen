@@ -127,7 +127,7 @@ export default {
       });
     },
     pwet() {
-      axios.get('http://localhost:8000/api/user').then((res) => {
+      axios.get('http://localhost:8000/api/me').then((res) => {
         console.log(res);
         alert("Bonjour " + res.data.name);
       })
