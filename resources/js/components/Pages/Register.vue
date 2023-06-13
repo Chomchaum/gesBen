@@ -11,9 +11,6 @@
         {{ $t('infosPerso') }}
         <small>{{ $t('infosPersoSub') }}</small>
       </v-stepper-step>
-      <my-stepper-content cur-step="1">
-<!--        <infos-perso-old v-on:continue="getPwAndContinue($event)"></infos-perso-old>-->
-      </my-stepper-content>
 
       <v-stepper-step
         :complete="formStep > 2"
@@ -41,7 +38,6 @@ export default {
   components: {
     Disponibilites,
     Benevolat,
-    InfosPersoOld,
     MyStepperContent,
   },
 
