@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Benevole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Benevole newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Benevole query()
- * @mixin \Eloquent
  * @property int $id
  * @property int $user_id
  * @property string $lastname
@@ -31,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Benevole whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Benevole whereUserId($value)
  * @property-read \App\Models\User|null $user
+ * @mixin \Eloquent
  */
 class Benevole extends Model
 {

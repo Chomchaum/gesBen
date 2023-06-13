@@ -12,7 +12,7 @@
         <small>{{ $t('infosPersoSub') }}</small>
       </v-stepper-step>
       <my-stepper-content cur-step="1">
-        <infos-perso-old v-on:continue="getPwAndContinue($event)"></infos-perso-old>
+<!--        <infos-perso-old v-on:continue="getPwAndContinue($event)"></infos-perso-old>-->
       </my-stepper-content>
 
       <v-stepper-step
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import InfosPersoOld from "../InfosPersoOld.vue";
 import Benevolat from "../Benevolat.vue";
 import Disponibilites from "../Disponibilites.vue";
 import MyStepperContent from "../MyStepperContent.vue";

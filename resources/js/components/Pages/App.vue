@@ -59,12 +59,6 @@
       <!--      <home/>-->
       <v-container>
         <v-row dense>
-          <v-col>
-            <sign-in/>
-          </v-col>
-          <v-col>
-            <sign-up/>
-          </v-col>
         </v-row>
       </v-container>
       <!--      <about/>-->
@@ -94,22 +88,18 @@ import Debug from "../Debug.vue";
 
 import Home from "./Home.vue";
 import Dashboard from "./Dashboard.vue";
-import SignUp from "./SignUp.vue";
 import Register from "./Register.vue";
 import Planning from "./Planning.vue";
 import About from "./About.vue";
 import moment from "moment";
-import SignIn from "./SignIn.vue";
 
 export default {
   name: "App",
   components: {
-    SignIn,
     NavDrawer,
     Debug,
     Home,
     Dashboard,
-    SignUp,
     Register,
     Planning,
     About,
