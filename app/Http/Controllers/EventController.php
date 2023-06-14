@@ -27,13 +27,8 @@ class EventController extends Controller
      */
     public function create(CreateEventRequest $request)
     {
-        dump('plop');
         $myEvent = collect($request->validated())->put('user_id', auth()->user()->id)->toArray();
-        //$myEvent['reseaux_sociaux'] = json_encode($myEvent['reseaux_sociaux']);
-        dump('$myEvent');
-        dump($myEvent);
         $event = Event::create($myEvent);
-        dump($event);
         return response($event, 201);
     }
 
