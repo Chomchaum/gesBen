@@ -13,7 +13,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        /*\DB::table('users')->insert([
+            'firstname' => 'Chomchaum',
+            'lastname' => 'dev',
+            'email' => 'Chomchaum@dev.fr',
+            'email_verified_at' => now(),
+            'password' => bcrypt('dev'),
+            'telephone' => '0123456789',
+            'birth_year' => '1970',
+            'address' => 'home',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);*/
     }
 }
 /*

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Requests\GetUserRequest;
@@ -18,6 +19,11 @@ use App\Http\Requests\GetUserRequest;
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/planning', function () {
     });
+});
+
+Route::get('/me', function() {
+    dump(auth()->user());
+    return auth()->user();
 });
 
 Route::get('/logout', [\App\Http\Controllers\SanctumAuthController::class, 'logout']);

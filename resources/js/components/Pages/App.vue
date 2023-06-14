@@ -163,6 +163,10 @@ export default {
       this.curUser = null
     }
   },
+
+  setup() {
+    axios.get('/sanctum/csrf-cookie');
+  },
 }
 </script>
 
