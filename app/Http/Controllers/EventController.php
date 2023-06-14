@@ -65,6 +65,7 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
+        abort_unless(auth()->user()->owned_events()->whereIn($event->id)->count() > 0, 403);
 
         return response($event->delete());
     }
