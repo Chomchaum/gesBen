@@ -12,9 +12,11 @@ class CreateUserRequest extends \Illuminate\Foundation\Http\FormRequest
     public function rules()
     {
         return [
-          'name' => 'required',
-          'email' => 'required',
-          'password' => 'required',
-          ];
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            ''
+        ];
     }
 }

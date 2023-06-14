@@ -17,6 +17,10 @@ Route::view('/', 'welcome', ['name' => 'App']);
 
 Route::view('/register', 'register');
 
+Route::get('/me', function() {
+    return auth()->user();
+});
+
 Route::prefix('auth')->group(function () {
     Route::post('/login', [\App\Http\Controllers\SanctumAuthController::class, 'login'])->name('login');
     Route::post('/register', [\App\Http\Controllers\SanctumAuthController::class, 'register'])->name('userRegister');

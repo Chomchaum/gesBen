@@ -3,8 +3,6 @@
     <nav-drawer :nav-items="visibleNavItems" :cur-page="curPage" :user="curUser" v-on:logOut="logOut"/>
 
     <v-app-bar app clipped-left>
-      <v-img alt="Site en accès anticipé" src="assets/beta_icon.png" max-width="50px"
-             style="position: absolute; top: 0; left: 0"/>
       <h1>Mes Supers Bénévoles</h1>
       <template v-slot:extension>
         <h2 class="info--text">Aucun événement sélectionné</h2>
@@ -58,8 +56,6 @@
       <debug :is_debug="app_debug"/>
       <!--      <home/>-->
       <v-container>
-        <v-row dense>
-        </v-row>
       </v-container>
       <!--      <about/>-->
     </v-main>
@@ -135,7 +131,7 @@ export default {
       }
     ],
     right: null,
-    app_debug: false,
+    app_debug: true,
     curPage: 0,
     curYear: moment().year() > 2023 ? '2023 - ' + moment().year() : '2023',
     curUser: 'Me',

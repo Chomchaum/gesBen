@@ -41,10 +41,73 @@ export default {
     ColorCtr,
   },
   props: ["is_debug"],
-  data() {
-    return {
-      isDarkTheme: false,
+
+  data: () => ({
+    isDarkTheme: false,
+    debug_data: null,
+    user: {
+      id: null
     }
+  }),
+
+  mounted() {
+    this.login();
+  },
+
+  methods: {
+    register() {
+      axios.post('http://localhost:8000/auth/register', {
+        firstname: 'Chomchaum',
+        lastname: 'dev',
+        email: 'Chomchaum@dev.fr',
+        password: 'dev',
+      })
+    },
+
+    login() {
+      axios.post('http://localhost:8000/auth/login', {
+        username: 'Chomchaum@dev.fr',
+        password: 'dev',
+      }).then(res => {
+        this.user = res.data.success;
+      });
+    },
+
+    logout() {
+      axios.get('http://localhost:8000/api/logout').then(res => {
+        this.user = res.data.success;
+      });
+    },
+
+    me() {
+      api.get('http://localhost:8000/api/users').then(res => {
+        this.debug_data = res.data;
+      });
+    },
+
+    create() {
+      api.get('http://localhost:8000/api/me').then(res => {
+        this.debug_data = res.data;
+      });
+      axios.post('http://localhost:8000/api/event/create', {
+        nom: 'MyEvent',
+        'organisation': 'myasso',
+        'description': 'lorem ipsum',
+        'site_web': 'www',
+        'reseaux_sociaux': {'twitter': '@me', 'instagram': '@you'},
+      }, {withCredentials: true}).then(res => {
+        this.debug_data = res;
+      });
+    },
+    show() {
+
+    },
+    update() {
+
+    },
+    destroy() {
+
+    },
   }
 }
 </script>

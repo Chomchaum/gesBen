@@ -16,15 +16,27 @@ use App\Http\Requests\GetUserRequest;
 */
 
 Route::middleware(['auth:sanctum'])->group(function () {
-
-
     Route::get('/planning', function () {
-
     });
 });
 
 Route::get('/logout', [\App\Http\Controllers\SanctumAuthController::class, 'logout']);
 
-Route::get('/user', function (GetUserRequest $request) {
-    return auth()->user();
+Route::prefix('event')->group(function () {
+    Route::post('/create', [\App\Http\Controllers\EventController::class, 'create']);
+    Route::get('/{event}', [\App\Http\Controllers\EventController::class, 'show']);
+    Route::post('/update/{event}', [\App\Http\Controllers\EventController::class, 'update']);
+    Route::get('/destroy/{event}', [\App\Http\Controllers\EventController::class, 'destroy']);
+});
+
+Route::prefix('user')->group(function () {
+    Route::post('/create', [\App\Http\Controllers\SanctumAuthController::class, 'create']);
+    Route::get('/{user}', [\App\Http\Controllers\SanctumAuthController::class, 'show']);
+    Route::post('/update/{user}', [\App\Http\Controllers\SanctumAuthController::class, 'update']);
+    Route::get('/destroy/{user}', [\App\Http\Controllers\SanctumAuthController::class, 'destroy']);
+});
+
+Route::get('/users', function () {
+    abort_unless(auth()->check(), 501);
+    return User::get();
 });

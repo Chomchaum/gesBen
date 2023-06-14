@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateBenevoleRequest;
+use App\Http\Requests\CreateEventRequest;
 use App\Models\Benevole;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,9 +14,9 @@ class BenevoleController extends Controller
     /**
      * Crée un bénévole et le stocke en DB
      *
-     * @param CreateBenevoleRequest $request
+     * @param CreateEventRequest $request
      */
-    public function create(CreateBenevoleRequest $request)
+    public function create(CreateEventRequest $request)
     {
         Benevole::create($request->validated());
         return response("OK");

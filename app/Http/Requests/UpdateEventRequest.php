@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateBenevoleRequest extends FormRequest
+class UpdateEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class CreateBenevoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,13 +24,12 @@ class CreateBenevoleRequest extends FormRequest
     public function rules()
     {
         return [
-          'user_id' => 'required',
-          'lastname' => 'required',
-          'firstname' => 'required',
-          'birthdate' => 'required',
-          'isUnderage' => 'required',
-          'phone' => 'sometimes',
-          'size' => 'sometimes',
+            'nom' => 'required',
+            'user_id' => 'required',
+            'organisation' => 'sometimes',
+            'description' => 'sometimes',
+            'site_web' => 'sometimes',
+            'reseaux_sociaux' => 'sometimes',
         ];
     }
 }
