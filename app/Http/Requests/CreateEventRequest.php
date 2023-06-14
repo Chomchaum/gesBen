@@ -13,7 +13,6 @@ class CreateEventRequest extends FormRequest
      */
     public function authorize()
     {
-        dump(auth()->user());
         return auth()->user() !== null;
     }
 

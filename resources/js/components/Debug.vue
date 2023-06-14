@@ -28,15 +28,29 @@
           {{ $t('warning') }}
         </v-btn>
       </color-ctr>
+
+      <v-container>
+        <v-btn @click="register">register</v-btn>
+        <v-btn @click="login">login</v-btn>
+        <v-btn @click="logout">logout</v-btn>
+        <v-btn @click="me">me</v-btn>
+      </v-container>
+      <v-container>
+        <v-btn @click="create">create</v-btn>
+        <v-btn @click="login">login</v-btn>
+        <v-btn @click="logout">logout</v-btn>
+        <v-btn @click="me">me</v-btn>
+      </v-container>
     </v-card>
   </div>
 </template>
 
 <script>
 import ColorCtr from "./ColorCtr.vue";
+import api from "../api.js";
 
 export default {
-  name: "Colors",
+  name: "Debug",
   components: {
     ColorCtr,
   },
