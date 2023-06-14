@@ -40,7 +40,8 @@ class SanctumAuthController extends Controller
     public function register(CreateUserRequest $request)
     {
         $user = User::create([
-          'name' => $request->input('name'),
+          'firstname' => $request->input('firstname'),
+          'lastname' => $request->input('lastname'),
           'email' => $request->input('email'),
           'password' => $request->input('password'),
         ]);

@@ -28,23 +28,102 @@
           {{ $t('warning') }}
         </v-btn>
       </color-ctr>
+
+      <v-container>
+        <v-btn @click="register">register</v-btn>
+        <v-btn @click="login">login</v-btn>
+        <v-btn @click="logout">logout</v-btn>
+        <v-btn @click="me">me</v-btn>
+      </v-container>
+      <v-container>
+        <v-btn @click="create">create</v-btn>
+        <v-btn @click="login">login</v-btn>
+        <v-btn @click="logout">logout</v-btn>
+        <v-btn @click="me">me</v-btn>
+      </v-container>
     </v-card>
   </div>
 </template>
 
 <script>
 import ColorCtr from "./ColorCtr.vue";
+import api from "../api.js";
 
 export default {
-  name: "Colors",
+  name: "Debug",
   components: {
     ColorCtr,
   },
   props: ["is_debug"],
-  data() {
-    return {
-      isDarkTheme: false,
+
+  data: () => ({
+    isDarkTheme: false,
+    debug_data: null,
+    user: {
+      id: null
     }
+  }),
+
+  mounted() {
+    axios.get('/sanctum/csrf-cookie').then(_ => {
+      this.login();
+    })
+  },
+
+  methods: {
+    register() {
+      axios.post('http://localhost:8000/auth/register', {
+        firstname: 'Chomchaum',
+        lastname: 'dev',
+        email: 'Chomchaum@dev.fr',
+        password: 'dev',
+      })
+    },
+
+    login() {
+      axios.post('http://localhost:8000/auth/login', {
+        username: 'Chomchaum@dev.fr',
+        password: 'dev',
+      }).then(res => {
+        this.user = res.data.success;
+      });
+    },
+
+    logout() {
+      axios.get('http://localhost:8000/api/logout').then(res => {
+        this.user = res.data.success;
+      });
+    },
+
+    me() {
+      api.get('http://localhost:8000/api/users').then(res => {
+        this.debug_data = res.data;
+      });
+    },
+
+    create() {
+      api.get('http://localhost:8000/api/users').then(res => {
+        this.debug_data = res.data;
+      });
+      axios.post('http://localhost:8000/api/event/create', {
+        nom: 'MySecondEvent',
+        organisation: 'myasso',
+        description: 'lorem ipsum',
+        site_web: 'www',
+        reseaux_sociaux: {twitter: '@me', instagram: '@me'},
+      }, {withCredentials: true}).then(res => {
+        this.debug_data = res;
+      });
+    },
+    show() {
+
+    },
+    update() {
+
+    },
+    destroy() {
+
+    },
   }
 }
 </script>

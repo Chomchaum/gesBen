@@ -9,6 +9,6 @@ class UserObserver
 
     public function deleting(User $user)
     {
-        $user->benevole()->delete();
+        $user->owned_events()->delete();
     }
 }
