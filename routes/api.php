@@ -38,5 +38,5 @@ Route::prefix('user')->group(function () {
 
 Route::get('/users', function () {
     abort_unless(auth()->check(), 501);
-    return User::get();
+    return auth()->user();
 });

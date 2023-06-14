@@ -16,7 +16,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return auth()->user()->events;
+        return auth()->user()->owned_events;
     }
 
     /**
@@ -27,7 +27,14 @@ class EventController extends Controller
      */
     public function create(CreateEventRequest $request)
     {
-        return response(Event::create(collect($request->validated())->put('user_id', auth()->user()->id)->toArray()), 201);
+        dump('plop');
+        $myEvent = collect($request->validated())->put('user_id', auth()->user()->id)->toArray();
+        //$myEvent['reseaux_sociaux'] = json_encode($myEvent['reseaux_sociaux']);
+        dump('$myEvent');
+        dump($myEvent);
+        $event = Event::create($myEvent);
+        dump($event);
+        return response($event, 201);
     }
 
     /**

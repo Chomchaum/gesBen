@@ -29,6 +29,7 @@ class CreateEventRequest extends FormRequest
             'description' => 'sometimes',
             'site_web' => 'sometimes',
             'reseaux_sociaux' => 'sometimes',
+            'private' => 'sometimes',
         ];
     }
 }

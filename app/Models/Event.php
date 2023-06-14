@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $description
  * @property string|null $site_web
  * @property string|null $reseaux_sociaux
+ * @property int $private
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $owner
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereNom($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereOrganisation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Event wherePrivate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereReseauxSociaux($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereSiteWeb($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Event whereUpdatedAt($value)
@@ -34,12 +36,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Event extends Model
 {
-    use HasFactory;
-
     protected $table = 'events';
+
+    protected $guarded = ['id'];
 
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function setReseauxSociauxAttribute($value)
+    {
+        $this->attributes['reseaux_sociaux'] = json_encode($value);
     }
 }

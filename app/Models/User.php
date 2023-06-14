@@ -19,14 +19,14 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $telephone
  * @property string|null $birth_year
  * @property string|null $address
- * @property string $contact_fav
+ * @property string|null $contact_fav
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $events
- * @property-read int|null $events_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $owned_events
+ * @property-read int|null $owned_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory(...$parameters)
@@ -57,12 +57,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-      'firstname',
-      'lastname',
-      'email',
-      'password',
-    ];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -71,8 +66,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-      'password',
-      'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -81,7 +76,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-      'email_verified_at' => 'datetime',
+        'email_verified_at' => 'datetime',
     ];
 
     public function setPasswordAttribute($value)

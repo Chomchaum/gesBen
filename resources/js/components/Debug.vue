@@ -65,7 +65,9 @@ export default {
   }),
 
   mounted() {
-    this.login();
+    axios.get('/sanctum/csrf-cookie').then(_ => {
+      this.login();
+    })
   },
 
   methods: {
@@ -100,15 +102,15 @@ export default {
     },
 
     create() {
-      api.get('http://localhost:8000/api/me').then(res => {
+      api.get('http://localhost:8000/api/users').then(res => {
         this.debug_data = res.data;
       });
       axios.post('http://localhost:8000/api/event/create', {
-        nom: 'MyEvent',
-        'organisation': 'myasso',
-        'description': 'lorem ipsum',
-        'site_web': 'www',
-        'reseaux_sociaux': {'twitter': '@me', 'instagram': '@you'},
+        nom: 'MySecondEvent',
+        organisation: 'myasso',
+        description: 'lorem ipsum',
+        site_web: 'www',
+        reseaux_sociaux: {twitter: '@me', instagram: '@me'},
       }, {withCredentials: true}).then(res => {
         this.debug_data = res;
       });
