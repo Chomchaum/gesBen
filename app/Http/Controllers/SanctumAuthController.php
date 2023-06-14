@@ -20,6 +20,7 @@ class SanctumAuthController extends Controller
         $email = $request->input('username');
         $password = $request->input('password');
         $user = false;
+        dump('IN');
 
         if (User::whereEmail($email)->exists()) {
             $user = User::whereEmail($email)->first();
@@ -30,9 +31,11 @@ class SanctumAuthController extends Controller
         $credentials = ['email' => $user->getRawOriginal('email'), 'password' => $password];
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            dump(auth()->user());
 
             return response(['success' => auth()->user()]);
         } else {
+            dump('notlogged');
             return response(['success' => false], 404);
         }
     }
