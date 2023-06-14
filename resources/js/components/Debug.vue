@@ -28,39 +28,18 @@
           {{ $t('warning') }}
         </v-btn>
       </color-ctr>
-
-      <v-divider/>
-      <v-container style="display: flex; flex-direction: row; justify-content: space-around">
-        <span>User</span>
-        <v-btn color='primary' @click="register">REGISTER</v-btn>
-        <v-btn color='success' @click="login">LOGIN</v-btn>
-        <v-btn color='error' @click="logout">LOGOUT</v-btn>
-        <v-btn color='accent' @click="me">ME</v-btn>
-      </v-container>
-      <v-container style="display: flex; flex-direction: row; justify-content: space-around">
-        <span>Event</span>
-        <v-btn color='success' @click="create">CREATE</v-btn>
-        <v-btn color='primary' @click="show">SHOW</v-btn>
-        <v-btn color='warning' @click="update">UPDATE</v-btn>
-        <v-btn color='error' @click="destroy">DESTROY</v-btn>
-      </v-container>
-      <pre>{{ debug_data }}</pre>
     </v-card>
   </div>
 </template>
 
 <script>
 import ColorCtr from "./ColorCtr.vue";
-import api from '../api'
-
 
 export default {
-  name: "Debug",
-
+  name: "Colors",
   components: {
     ColorCtr,
   },
-
   props: ["is_debug"],
 
   data: () => ({
