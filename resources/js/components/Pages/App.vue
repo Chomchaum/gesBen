@@ -1,68 +1,79 @@
 <template>
   <div class="myapp">
-    <nav-drawer :nav-items="visibleNavItems" :cur-page="curPage" :user="curUser" v-on:logOut="logOut"/>
-
-    <v-app-bar app clipped-left>
-      <h1>Mes Supers Bénévoles</h1>
-      <template v-slot:extension>
-        <h2 class="info--text">Aucun événement sélectionné</h2>
-        <v-spacer/>
-        <!--    Todo v-if à mettre si admin-->
-        <v-select
-          v-if="true"
-          v-model="viewAs"
-          :items="viewAsList"
-          label="Voir en tant que"
-          dense
-          outlined
-          style="max-width: 235px"
-        >
-        </v-select>
-
-        <v-btn icon class="mt-n6 mx-2">
-          <v-icon large>mdi-theme-light-dark</v-icon>
-        </v-btn>
-
-        <v-menu offset-y>
-          <template v-slot:activator="{on, attrs}">
-            <v-btn icon class="mt-n6">
-              <v-icon large v-on="on" v-bind="attrs">mdi-translate</v-icon>
-            </v-btn>
-          </template>
-          <v-list dense>
-            <v-list-item-group
-              v-model="curLang"
-              color="primary"
-            >
-              <v-list-item
-                v-for="(language) in languages"
-                :key="language.shortname"
-              >
-                <v-list-item-icon v-if="false">
-                  <v-icon v-text="language.flag"/>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title v-text="language.name"/>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-menu>
-      </template>
+    <v-app-bar app clipped-left flat>
+      <v-app-bar-nav-icon @click="drawer = !drawer"/>
+      <h2>Mes Supers Bénévoles</h2>
+      <v-spacer/>
+      <!--    Todo viewAs : v-if admin à intégrer-->
+      <v-select v-model="viewAs"
+                v-if="false"
+                :items="viewAsList"
+                label="Voir en tant que"
+                :menu-props="{ offsetY: true }"
+                dense
+                outlined
+                style="max-width: 175px; position: relative; top: 1em"
+      >
+      </v-select>
+      <v-menu v-if="authUser !== null" offset-y>
+        <template v-slot:activator="{on, attrs}">
+          <v-list-item-avatar color="indigo" class="my-3" size="40" v-on="on" v-bind="attrs">
+          <span class="white--text text-h6 text-">{{
+              authUser.firstname.charAt(0) + authUser.lastname.charAt(0)
+            }}</span>
+          </v-list-item-avatar>
+        </template>
+        <v-list dense>
+          <v-list-item @click="curComponent = 0">
+            <v-list-item-title class="font-weight-bold">
+              Mon compte
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="logOut">
+            <v-list-item-title class="error--text font-weight-bold">
+              Déconnexion
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <div v-if="authUser === null">
+        <v-btn class="d-block mx-auto" small outlined @click="showSignIn">Connexion</v-btn>
+        <v-btn class="d-block mt-1" x-small text color="primary" @click="showSignUp">Créer mon compte</v-btn>
+      </div>
     </v-app-bar>
 
-    <v-main>
+    <nav-drawer :nav-items="visibleNavItems" :drawer="drawer" @changePage="changePage"/>
 
+    <v-main>
       <debug :is_debug="app_debug"/>
-      <!--      <home/>-->
-      <v-container>
-      </v-container>
-      <!--      <about/>-->
+      <profil v-if="curComponent === 0"/>
+      <home v-if="curComponent === 1" :user="authUser"/>
+      <about v-if="curComponent === 5"/>
     </v-main>
+    <v-dialog
+      v-model="dialog.isActive"
+      :max-width="dialog.width"
+      @click:outside="dialog.isActive = false"
+    >
+      <sign-in v-if="dialog.type === 'signIn'" @closeDialog="dialog.isActive = false"/>
+      <sign-up v-if="dialog.type === 'signUp'" @closeDialog="dialog.isActive = false"/>
+    </v-dialog>
 
     <v-footer app>
+      <v-select
+        v-model="curLang"
+        :items="languages"
+        item-value="shortname"
+        :menu-props="{ top: true, offsetY: true, closeOnContentClick: true }"
+        dense
+        outlined
+        prepend-icon="mdi-translate"
+        hide-details
+        style="min-width: 180px; max-width: 180px; margin-inline: 23px;"
+      >
+      </v-select>
       <v-spacer/>
-      <h4 class="ml-10 warning--text text--darken-2">
+      <h4 class="ml-10 warning--text text-center text--darken-2">
         Site en accès anticipé, des fonctionnalités sont susceptibles de dysfonctionner
       </h4>
       <v-spacer/>
@@ -78,80 +89,86 @@
 </template>
 
 <script>
+import api from "../../api";
 import NavDrawer from "../NavDrawer.vue";
 
 import Debug from "../Debug.vue";
 
+import Profil from "./Profil.vue";
 import Home from "./Home.vue";
 import Dashboard from "./Dashboard.vue";
-import Register from "./Register.vue";
 import Planning from "./Planning.vue";
 import About from "./About.vue";
 import moment from "moment";
+import SignIn from "../Dialogs/SignIn.vue";
+import SignUp from "../Dialogs/SignUp.vue";
+
+import {useUserStore} from "../../stores/User";
 
 export default {
   name: "App",
   components: {
+    SignIn,
+    SignUp,
     NavDrawer,
     Debug,
+    Profil,
     Home,
     Dashboard,
-    Register,
     Planning,
     About,
   },
 
-  data: () => ({
+  setup() {
+    const userStore = useUserStore();
+    return {userStore}
+  },
+
+  data: _ => ({
     navItems: [
-      {id: 0, title: 'Accueil', icon: 'mdi-home', required: ''},
-      {id: 1, title: 'Dashboard', icon: 'mdi-view-dashboard', required: 'loggedin'},
-      {id: 2, title: 'Créer un compte', icon: 'mdi-account-plus', required: 'loggedout'},
-      {id: 3, title: 'Participer', icon: 'mdi-account-plus', required: 'eventpicked'},
-      {id: 4, title: 'Planning', icon: 'mdi-timeline-text', required: 'loggedin-eventpicked'},
-      {id: 5, title: 'À propos', icon: 'mdi-help-box', required: ''},
+      {id: 0, title: 'Profil', icon: 'mdi-account', required: 'loggedin', show: true},
+      {id: 1, title: 'Accueil', icon: 'mdi-home', required: '', show: true},
+      {id: 2, title: 'Dashboard', icon: 'mdi-view-dashboard', required: 'loggedin', show: true},
+      {id: 3, title: 'Participer', icon: 'mdi-account-plus', required: 'eventpicked', show: true},
+      {id: 4, title: 'Planning', icon: 'mdi-timeline-text', required: 'loggedin-eventpicked', show: true},
+      {id: 5, title: 'À propos', icon: 'mdi-help-circle', required: '', show: true},
     ],
     languages: [
-      {
-        shortname: 'fr',
-        name: 'français',
-        region: 'France',
-        flag: 'https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_France_%281794%E2%80%931815%2C_1830%E2%80%931974%2C_2020%E2%80%93present%29.svg'
-      },
-      {
-        shortname: 'br',
-        name: 'breton',
-        region: null,
-        flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg/320px-Flag_of_Brittany_%28Gwenn_ha_du%29.svg.png'
-      },
-      {
-        shortname: 'en',
-        name: 'anglais',
-        region: 'United-Kingdom',
-        flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Flag_of_Brittany_%28Gwenn_ha_du%29.svg/320px-Flag_of_Brittany_%28Gwenn_ha_du%29.svg.png'
-      }
+      {shortname: 'fr', text: 'français', region: 'France'},
+      {shortname: 'br', text: 'brezhoneg', region: 'Breizh'},
+      {shortname: 'en', text: 'english', region: 'United-Kingdom'}
     ],
     right: null,
-    app_debug: true,
-    curPage: 0,
+    dialog: {
+      width: null,
+      isActive: false,
+      type: null,
+    },
+    app_debug: false,
+    curComponent: 1,
     curYear: moment().year() > 2023 ? '2023 - ' + moment().year() : '2023',
-    curUser: 'Me',
     curLang: 'fr',
-    isLoggedIn: false,
     activeEventId: null,
-    viewAsList: ['Administrateur', 'Bénévole sans compte', 'Bénévole avec compte', 'Visiteur'],
+    viewAsList: ['Administrateur', 'Bénévole', 'Visiteur'],
     viewAs: 'Administrateur',
+    drawer: true,
   }),
 
   computed: {
+    authUser() {
+      return this.userStore.auth_user
+    },
+
     visibleNavItems() {
-      return this.navItems.filter((elem) => {
+      return this.navItems.map((elem) => {
         let showElem = true;
-        if (elem.required.search('loggedin') >= 0 && !this.isLoggedIn
-          || elem.required.search('loggedout') >= 0 && this.isLoggedIn
+        if (elem.required.search('loggedin') >= 0 && this.authUser === null
+          || elem.required.search('loggedout') >= 0 && this.authUser !== null
           || elem.required.search('eventpicked') >= 0 && this.activeEventId === null)
-          showElem = false
-        return showElem
-      });
+          showElem = false;
+        elem.show = showElem;
+        return elem;
+      })
     },
   },
 
@@ -159,13 +176,28 @@ export default {
     log(val) {
       console.log(val)
     },
+    changePage(event) {
+      this.curComponent = event;
+    },
+    showSignIn() {
+      this.dialog.width = "20%";
+      this.dialog.isActive = true;
+      this.dialog.type = 'signIn';
+    },
+    showSignUp() {
+      this.dialog.width = "40%";
+      this.dialog.isActive = true;
+      this.dialog.type = 'signUp';
+    },
     logOut() {
-      this.curUser = null
-    }
-  },
-
-  setup() {
-    axios.get('/sanctum/csrf-cookie')
+      axios.get('http://localhost:8000/api/logout').then(res => {
+        this.userStore.auth_user = null;
+        location.reload();
+      });
+    },
+    toggleLog() {
+      this.curUser = (this.curUser === 'Me' ? null : 'Me');
+    },
   },
 }
 </script>

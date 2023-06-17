@@ -2,43 +2,25 @@
   <v-navigation-drawer
     app
     clipped
-    bottom
+    left
+    v-model="drawer"
+    width=226
   >
-    <v-list-item v-if="user !== null" class="px-2" link>
-      <v-list-item-avatar color="indigo" class="my-4">
-        <v-icon dark>mdi-account</v-icon>
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title class="text-h6">
-          {{ $t('prnom') }}
-        </v-list-item-title>
-        <v-list-item-subtitle>
-          {{ $t('monCompte') }}
-        </v-list-item-subtitle>
-      </v-list-item-content>
-      <v-tooltip bottom color="error lighten-1" content-class="px-2 py-1">
-        <template v-slot:activator="{on, attrs}">
-          <v-icon v-bind="attrs" v-on="on" v-on:click="clog" dark class="mt-n3">mdi-logout</v-icon>
-        </template>
-        <span>Déconnexion</span>
-      </v-tooltip>
-    </v-list-item>
-
-    <v-divider v-if="user !== null"></v-divider>
-
     <v-list
       :dense="false"
-      flatflat
       nav
     >
       <v-list-item-group
-        v-model="curPage"
+        :value="curItem"
         color="primary"
+        mandatory
       >
         <v-list-item
-          v-for="(item, index) in navItems"
-          @click="$emit('changePage', this.curNavItem)"
-          :key="index"
+          v-for="item in navItems"
+          @click="$emit('changePage', item.id)"
+          v-if="item.id > 0"
+          v-show="item.show"
+          :key="item.id"
           link
         >
           <v-list-item-icon>
@@ -55,7 +37,7 @@
       <v-img
         :max-height="220"
         contain
-        src="https://www.millenaire3.com/var/m3/storage/images/0/2/9/9/19920-3-fre-FR/A_qui_profite_le_don.png"
+        src="images/default_poster.png"
       ></v-img>
     </template>
   </v-navigation-drawer>
@@ -65,22 +47,13 @@
 export default {
   name: "NavDrawer",
   props: [
-    'curPage',
     'navItems',
-    'user',
+    'drawer',
   ],
 
   data: () => ({
-    curNavItem: 2,
+    curItem: null
   }),
-
-  computed: {},
-
-  methods: {
-    clog() {
-      this.$emit('logOut')
-    }
-  }
 }
 </script>
 

@@ -22,9 +22,10 @@ moment.locale('fr')
 import Vue from "vue";
 import vuetify from './vuetify';
 import {createPinia, PiniaVuePlugin} from "pinia";
+import piniaPersisted from "pinia-plugin-persistedstate";
 
 import App from "./components/Pages/App.vue";
-import RegisterPage from "./components/Pages/RegisterPage.vue";
+import RegisterPage from "./components/OLD/RegisterPage.vue";
 
 import VueI18n from "vue-i18n";
 import en from '../lang/en/messages.json';
@@ -35,6 +36,7 @@ Vue.use(PiniaVuePlugin);
 Vue.use(VueI18n)
 
 const pinia = createPinia();
+pinia.use(piniaPersisted);
 const i18n = new VueI18n({
   locale: 'fr',
   fallbackLocale: 'fr',

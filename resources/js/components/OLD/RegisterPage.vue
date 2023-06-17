@@ -104,10 +104,6 @@ export default {
     },
   }),
 
-  setup() {
-    axios.get('http://localhost:8000/sanctum/csrf-cookie')
-  },
-
   methods: {
     submitLogin() {
       axios.post('http://localhost:8000/auth/login', {

@@ -24,7 +24,7 @@ class SanctumAuthController extends Controller
         if (User::whereEmail($email)->exists()) {
             $user = User::whereEmail($email)->first();
         } else {
-            abort(404);
+            abort(401);
         }
 
         $credentials = ['email' => $user->getRawOriginal('email'), 'password' => $password];
@@ -33,12 +33,13 @@ class SanctumAuthController extends Controller
 
             return response(['success' => auth()->user()]);
         } else {
-            return response(['success' => false], 404);
+            return response(['success' => false], 401);
         }
     }
 
     public function register(CreateUserRequest $request)
     {
+
         $user = User::create([
           'firstname' => $request->input('firstname'),
           'lastname' => $request->input('lastname'),
@@ -50,7 +51,7 @@ class SanctumAuthController extends Controller
         if (Auth::attempt($credentials)) {
             return response(['user_id' => auth()->user()->id]);
         } else {
-            return response(['success' => false], 404);
+            return response(['success' => false], 401);
         }
     }
 

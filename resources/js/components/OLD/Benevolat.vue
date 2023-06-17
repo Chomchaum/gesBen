@@ -160,8 +160,8 @@
 
 <script>
 import SelectPoste from "./SelectPoste.vue";
-import MyCombobox from "./MyCombobox.vue";
-import {useRegisterStore} from "../stores/Register";
+import MyCombobox from "../MyCombobox.vue";
+import {useRegisterStore} from "../../stores/Register";
 
 export default {
   name: "Benevolat",

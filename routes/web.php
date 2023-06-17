@@ -25,7 +25,3 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [\App\Http\Controllers\SanctumAuthController::class, 'login'])->name('login');
     Route::post('/register', [\App\Http\Controllers\SanctumAuthController::class, 'register'])->name('userRegister');
 });
-
-Route::prefix('benevole')->group(function () {
-    Route::post('/create', [\App\Http\Controllers\BenevoleController::class, 'create'])->name('benevRegister');
-});

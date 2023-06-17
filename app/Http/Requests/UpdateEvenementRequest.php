@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEventRequest extends FormRequest
+class UpdateEvenementRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateEventRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return auth()->user()->owned_events()->find($this->request->get('id')) !== null ;
     }
 
     /**
@@ -24,12 +24,14 @@ class UpdateEventRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom' => 'required',
-            'user_id' => 'required',
+            'id' => 'required',
+            'nom' => 'sometimes',
             'organisation' => 'sometimes',
             'description' => 'sometimes',
             'site_web' => 'sometimes',
             'reseaux_sociaux' => 'sometimes',
+            'private' => 'sometimes',
         ];
     }
+
 }

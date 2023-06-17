@@ -120,10 +120,10 @@
 </template>
 
 <script>
-import MyTimePicker from "./MyTimePicker.vue";
-import MyDateTime from "./MyDateTime.vue";
+import MyTimePicker from "../MyTimePicker.vue";
+import MyDateTime from "../MyDateTime.vue";
 import moment from "moment";
-import {useRegisterStore} from "../stores/Register";
+import {useRegisterStore} from "../../stores/Register";
 
 export default {
   name: "Disponibilites",

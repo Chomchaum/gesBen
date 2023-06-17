@@ -1,13 +1,17 @@
 <template>
   <v-container>
-    <v-card class="text-center pa-3 mb-3" color="#333">
+    <v-card
+      v-if="this.user === null"
+      class="text-center pa-3 mb-3"
+      color="#333"
+    >
       <v-container>
-        <h5>Bienvenue sur</h5>
+        <h3>Bienvenue sur</h3>
         <h1>Mes Supers Bénévoles</h1>
-        <h5>Votre outil de recrutement et gestion de bénévoles pour tous vos évènements</h5>
-        <h5 class="success--text">Gratuit, moderne, dynamique et hautement personnalisable</h5>
+        <h3>Votre outil de recrutement et gestion de bénévoles pour tous vos évènements</h3>
+        <h3 class="success--text">Gratuit, moderne, dynamique et hautement personnalisable</h3>
       </v-container>
-      <v-row>
+<!--      <v-row>
         <v-col cols="12" sm="12">
           <v-card hover class="text-center" color="#666">
             <v-card-title style="justify-content: center">
@@ -25,7 +29,7 @@
             </v-card-title>
             <v-card-text>
               Parcourez les évènements autour de chez vous :
-<!--          Formulaire    -->
+&lt;!&ndash;          Formulaire    &ndash;&gt;
               <v-row>
                 <v-col cols="12" sm="7">
                   <v-autocomplete
@@ -48,7 +52,7 @@
                   <v-slider max="3" :tick-labels="distancesList"/>
                 </v-col>
               </v-row>
-<!--          Résultats    -->
+&lt;!&ndash;          Résultats    &ndash;&gt;
               <v-row>
                 <v-col cols="12" sm="12">
                   <v-simple-table width="100%">
@@ -80,7 +84,14 @@
             </v-card-text>
           </v-card>
         </v-col>
-      </v-row>
+      </v-row>-->
+    </v-card>
+    <v-card
+      v-if="this.user !== null"
+      class="text-center pa-3 mb-3"
+      color="#333"
+    >
+      <h2>Pwet</h2>
     </v-card>
   </v-container>
 </template>
@@ -88,8 +99,12 @@
 <script>
 export default {
   name: "Home",
+  props: [
+    'user',
+  ],
 
   data: () => ({
+
     epicentre: null,
     listeCommunes: [],
     communeLoading: false,

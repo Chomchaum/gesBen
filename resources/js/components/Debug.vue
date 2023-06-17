@@ -29,17 +29,41 @@
         </v-btn>
       </color-ctr>
 
+      <v-card flat>
+        <v-card-title>User</v-card-title>
+        <v-card-text style="display:flex;flex-direction:row;justify-content:space-evenly">
+          <v-btn @click="register">register</v-btn>
+          <v-btn @click="login">login</v-btn>
+          <v-btn @click="logout">logout</v-btn>
+          <v-btn @click="me">me</v-btn>
+        </v-card-text>
+      </v-card>
+      <v-card flat>
+        <v-card-title>
+          Event
+        </v-card-title>
+
+        <v-card-text>
+          <v-text-field
+            v-model="event_id"
+            label="event_id"
+            type="int"
+            style="display: inline-block; width: 100px !important"
+          >
+          </v-text-field>
+          <v-flex style="display:flex;flex-direction:row;justify-content:space-evenly;">
+            <v-btn @click="create">create</v-btn>
+
+            <v-btn @click="show">show</v-btn>
+            <v-btn @click="update">update</v-btn>
+            <v-btn @click="destroy">destroy</v-btn>
+            <v-btn @click="all_events">all</v-btn>
+          </v-flex>
+        </v-card-text>
+      </v-card>
+
       <v-container>
-        <v-btn @click="register">register</v-btn>
-        <v-btn @click="login">login</v-btn>
-        <v-btn @click="logout">logout</v-btn>
-        <v-btn @click="me">me</v-btn>
-      </v-container>
-      <v-container>
-        <v-btn @click="create">create</v-btn>
-        <v-btn @click="login">login</v-btn>
-        <v-btn @click="logout">logout</v-btn>
-        <v-btn @click="me">me</v-btn>
+        <pre>{{ debug_data }}</pre>
       </v-container>
     </v-card>
   </div>
@@ -47,7 +71,6 @@
 
 <script>
 import ColorCtr from "./ColorCtr.vue";
-import api from "../api.js";
 
 export default {
   name: "Debug",
@@ -61,13 +84,12 @@ export default {
     debug_data: null,
     user: {
       id: null
-    }
+    },
+    event_id: 10,
   }),
 
   mounted() {
-    axios.get('/sanctum/csrf-cookie').then(_ => {
-      this.login();
-    })
+    //
   },
 
   methods: {
@@ -75,14 +97,14 @@ export default {
       axios.post('http://localhost:8000/auth/register', {
         firstname: 'Chomchaum',
         lastname: 'dev',
-        email: 'Chomchaum@dev.fr',
+        email: 'Chomchaum2@dev.fr',
         password: 'dev',
       })
     },
 
     login() {
       axios.post('http://localhost:8000/auth/login', {
-        username: 'Chomchaum@dev.fr',
+        username: 'Chomchaum2@dev.fr',
         password: 'dev',
       }).then(res => {
         this.user = res.data.success;
@@ -96,17 +118,14 @@ export default {
     },
 
     me() {
-      api.get('http://localhost:8000/api/users').then(res => {
+      axios.get('http://localhost:8000/api/users').then(res => {
         this.debug_data = res.data;
       });
     },
 
     create() {
-      api.get('http://localhost:8000/api/users').then(res => {
-        this.debug_data = res.data;
-      });
-      axios.post('http://localhost:8000/api/event/create', {
-        nom: 'MySecondEvent',
+      axios.post('http://localhost:8000/api/evenement/create', {
+        nom: 'MyFourthEvent',
         organisation: 'myasso',
         description: 'lorem ipsum',
         site_web: 'www',
@@ -116,18 +135,32 @@ export default {
       });
     },
     show() {
-
+      axios.get('http://localhost:8000/api/evenement/' + this.event_id).then(res => {
+        this.debug_data = res.data;
+      });
     },
     update() {
-
+      axios.post('http://localhost:8000/api/evenement/update/' + this.event_id, {
+        id: this.event_id,
+        nom: 'MyFourthEvent',
+        organisation: 'yasso',
+      }).then(res => {
+        this.debug_data = res;
+      });
     },
     destroy() {
-
+      axios.get('http://localhost:8000/api/evenement/delete/' + this.event_id).then(res => {
+        this.debug_data = res.data;
+      });
+    },
+    all_events() {
+      axios.get('http://localhost:8000/api/evenement/all').then(res => {
+        this.debug_data = res.data;
+      });
     },
   }
 }
 </script>
 
 <style scoped>
-
 </style>

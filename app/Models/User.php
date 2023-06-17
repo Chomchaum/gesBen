@@ -25,7 +25,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Event> $owned_events
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Evenement> $owned_events
  * @property-read int|null $owned_events_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
@@ -86,6 +86,6 @@ class User extends Authenticatable
 
     public function owned_events()
     {
-        return $this->hasMany(Event::class, 'user_id', 'id');
+        return $this->hasMany(Evenement::class, 'user_id', 'id');
     }
 }

@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import Benevolat from "../Benevolat.vue";
-import Disponibilites from "../Disponibilites.vue";
+import Benevolat from "./Benevolat.vue";
+import Disponibilites from "./Disponibilites.vue";
 import MyStepperContent from "../MyStepperContent.vue";
 import {useRegisterStore} from "../../stores/Register";
 
